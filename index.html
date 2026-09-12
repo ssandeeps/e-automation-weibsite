@@ -33,12 +33,12 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": ["Organization", "LocalBusiness"],
   "name": "e-automation",
   "alternateName": "E-Automation",
   "url": "https://www.e-automation.net/",
   "description": "Independent nationwide supplier and sourcing partner for new, reconditioned and obsolete industrial automation and control components.",
-  "email": "e-automation@outlook.com",
+  "email": "quotes@e-automation.com",
   "telephone": "+19162945262",
   "address": {
     "@type": "PostalAddress",
@@ -49,6 +49,12 @@
     "addressCountry": "US"
   },
   "areaServed": ["US", "Worldwide"],
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+    "opens": "09:00",
+    "closes": "17:00"
+  },
   "sameAs": []
 }
 </script>
@@ -95,6 +101,52 @@
 </script>
 </head>
 <body>
+<script>
+  function handleCarouselImgError(img){
+    var carousel = img.closest('.product-carousel');
+    var imgs = Array.from(carousel.querySelectorAll('.carousel-img'));
+    var idx = imgs.indexOf(img);
+    var dots = Array.from(carousel.querySelectorAll('.carousel-dot'));
+    var wasActive = img.classList.contains('active');
+    img.remove();
+    if(dots[idx]) dots[idx].remove();
+    var remaining = carousel.querySelectorAll('.carousel-img');
+    if(remaining.length === 0){
+      var ph = carousel.querySelector('.carousel-placeholder'); if(ph) ph.style.display = 'flex';
+      carousel.querySelectorAll('.carousel-nav').forEach(function(b){ b.style.display = 'none'; });
+      var dw = carousel.querySelector('.carousel-dots'); if(dw) dw.style.display = 'none';
+      return;
+    }
+    if(wasActive){
+      remaining[0].classList.add('active');
+      var firstDot = carousel.querySelector('.carousel-dot');
+      if(firstDot) firstDot.classList.add('active');
+    }
+    if(remaining.length <= 1){
+      carousel.querySelectorAll('.carousel-nav').forEach(function(b){ b.style.display = 'none'; });
+      var dw2 = carousel.querySelector('.carousel-dots'); if(dw2) dw2.style.display = 'none';
+    }
+  }
+  function carouselStep(btn, dir){
+    var carousel = btn.closest('.product-carousel');
+    var imgs = Array.from(carousel.querySelectorAll('.carousel-img'));
+    if(imgs.length < 2) return;
+    var curIdx = imgs.findIndex(function(i){ return i.classList.contains('active'); });
+    var next = (curIdx + dir + imgs.length) % imgs.length;
+    imgs[curIdx].classList.remove('active'); imgs[next].classList.add('active');
+    var dots = Array.from(carousel.querySelectorAll('.carousel-dot'));
+    if(dots[curIdx]) dots[curIdx].classList.remove('active');
+    if(dots[next]) dots[next].classList.add('active');
+  }
+  function carouselGoTo(dot){
+    var carousel = dot.closest('.product-carousel');
+    var dots = Array.from(carousel.querySelectorAll('.carousel-dot'));
+    var imgs = Array.from(carousel.querySelectorAll('.carousel-img'));
+    var i = dots.indexOf(dot);
+    imgs.forEach(function(im, k){ im.classList.toggle('active', k === i); });
+    dots.forEach(function(d, k){ d.classList.toggle('active', k === i); });
+  }
+</script>
 <header>
   <div class="topbar">
     <div class="wrap">
@@ -102,7 +154,7 @@
         <span>USA · Shipping Nationwide</span>
         <a href="tel:+19162945262">☎ +1 916-294-5835</a>
         <a class="wa-link" href="https://wa.me/19162945262?text=Hi%2C%20I%27d%20like%20to%20enquire%20about%20a%20part." target="_blank" rel="noopener noreferrer"><svg class="wa-icon" width="14" height="14" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.01 3C9.38 3 4 8.38 4 15.01c0 2.34.64 4.53 1.75 6.4L4 29l7.77-1.7a12.9 12.9 0 0 0 4.24.72h.01c6.63 0 12.01-5.38 12.01-12.01C28.03 8.38 22.65 3 16.01 3zm0 21.86h-.01a10 10 0 0 1-5.1-1.4l-.37-.22-3.86.85.83-3.78-.24-.39a9.9 9.9 0 0 1-1.53-5.3c0-5.5 4.48-9.98 9.99-9.98 2.67 0 5.17 1.04 7.06 2.93a9.9 9.9 0 0 1 2.92 7.06c0 5.51-4.48 9.23-9.99 9.23zm5.47-7.44c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.65-2.05-.17-.3-.02-.46.13-.61.14-.14.3-.35.45-.53.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.08 3.18 5.05 4.46.7.3 1.25.48 1.68.62.71.22 1.35.19 1.86.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35z"/></svg>WhatsApp</a>
-        <a href="mailto:e-automation@outlook.com">✉ e-automation@outlook.com</a>
+        <a href="mailto:quotes@e-automation.com">✉ quotes@e-automation.com</a>
       </div>
       <div class="topbar-left">
         <a href="index.html#brands">150+ brands stocked</a>
@@ -205,7 +257,7 @@
 
       <div class="stock-table-wrap">
         <table id="stockTable">
-          <thead><tr><th>Manufacturer</th><th>Part / model number</th><th></th></tr></thead>
+          <thead><tr><th>Manufacturer</th><th>Part / model number</th><th>Status</th><th></th></tr></thead>
           <tbody id="stockTableBody"></tbody>
         </table>
       </div>
@@ -363,11 +415,39 @@
     </div>
   </section>
 
+  <!-- SHIPPING & PAYMENTS -->
+  <section id="shipping-payments" style="background:var(--white); padding:56px 0;">
+    <div class="wrap">
+      <div class="ship-pay-grid">
+        <div class="ship-pay-block">
+          <h3>Worldwide Shipping</h3>
+          <p>We ship nationwide across all 50 states and internationally, via trusted carriers.</p>
+          <div class="badge-row">
+            <span class="carrier-badge">DHL</span>
+            <span class="carrier-badge">FedEx</span>
+            <span class="carrier-badge">UPS</span>
+          </div>
+        </div>
+        <div class="ship-pay-block">
+          <h3>Payment Methods Accepted</h3>
+          <p>Secure payment options for businesses of every size.</p>
+          <div class="badge-row">
+            <span class="payment-badge">VISA</span>
+            <span class="payment-badge">Mastercard</span>
+            <span class="payment-badge">Amex</span>
+            <span class="payment-badge">Net Terms</span>
+            <span class="payment-badge">PayPal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ABOUT -->
   <section id="about">
     <div class="wrap about">
       <div class="about-visual">
-        <img src="images/warehouse.jpg" alt="e-automation warehouse and sourcing desk, Folsom, California" loading="lazy" onerror="this.style.display='none'">
+        <img src="images/warehouse.jpg" alt="e-automation office, 922 John Murray Way, Folsom, California" loading="lazy">
         <div class="about-visual-caption">E-AUTOMATION — FOLSOM, CALIFORNIA</div>
       </div>
       <div class="about-copy">
@@ -394,7 +474,6 @@
       <div class="cta-actions">
         <a href="#contact" class="btn btn-solid">Request a quote</a>
         <a href="https://wa.me/19162945262?text=Hi%2C%20I%27d%20like%20to%20enquire%20about%20a%20part." target="_blank" rel="noopener noreferrer" class="btn btn-outline">WhatsApp us</a>
-        <a href="tel:+19162945262" class="btn btn-outline">Call the sourcing desk</a>
       </div>
     </div>
   </section>
@@ -405,11 +484,12 @@
       <div class="section-head">
         <div class="kicker">Get in touch</div>
         <h2>Request a quote</h2>
-        <p>Send us the part number, quantity and lead time you need — our sourcing desk typically responds within one business day.</p>
+        <p>Send us the part number, quantity and urgency — our sourcing desk typically responds within one business day.</p>
       </div>
-      <form class="contact-form" action="https://formspree.io/f/your-form-id" method="POST">
+      <form class="contact-form" action="https://formsubmit.co/quotes@e-automation.com" method="POST">
         <input type="hidden" name="_subject" value="New part enquiry — e-automation website">
         <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
         <div class="row2">
           <div><label for="name">Full name</label><input id="name" name="name" type="text" placeholder="Your name" required></div>
@@ -420,7 +500,27 @@
           <div><label for="phone">Phone</label><input id="phone" name="phone" type="tel" placeholder="+1 ..." required></div>
         </div>
         <div><label for="part">Part number / description</label><input id="part" name="part_number" type="text" placeholder="e.g. 1756-L83E" required></div>
-        <div><label for="msg">Message</label><textarea id="msg" name="message" placeholder="Quantity, lead time needed, or anything else we should know" required></textarea></div>
+        <div class="row2">
+          <div><label for="qty">Quantity needed</label><input id="qty" name="quantity" type="text" placeholder="e.g. 2" required></div>
+          <div><label for="urgency">Urgency</label>
+            <select id="urgency" name="urgency" required>
+              <option value="">Select one</option>
+              <option value="Line down — urgent">Line down — urgent</option>
+              <option value="Standard lead time">Standard lead time</option>
+              <option value="Obsolete part search">Obsolete part search</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="condition">Condition preference</label>
+          <select id="condition" name="condition_preference" required>
+            <option value="">Select one</option>
+            <option value="New only">New only</option>
+            <option value="Reconditioned OK">Reconditioned OK</option>
+            <option value="Either — whatever is fastest">Either — whatever is fastest</option>
+          </select>
+        </div>
+        <div><label for="msg">Message</label><textarea id="msg" name="message" placeholder="Anything else we should know"></textarea></div>
         <div>
           <label class="robot-check">
             <input id="robotCheck" type="checkbox" required>
@@ -546,14 +646,31 @@
       <h4>Get in touch</h4>
       <ul>
         <li><a href="tel:+19162945262">+1 916-294-5835</a></li>
-        <li><a href="mailto:e-automation@outlook.com">e-automation@outlook.com</a></li>
-        <li>922 John Murray Way, Folsom, CA 95630, USA</li>
+        <li><a href="mailto:quotes@e-automation.com">quotes@e-automation.com</a></li>
+        <li><a href="https://www.google.com/maps/search/?api=1&query=922%20John%20Murray%20Way%2C%20Folsom%2C%20CA%2095630%2C%20USA" target="_blank" rel="noopener noreferrer">922 John Murray Way, Folsom, CA 95630, USA</a></li>
+        <li>Monday – Friday, 9:00 AM – 5:00 PM</li>
       </ul>
+    </div>
+  </div>
+  <div class="wrap trust-strip">
+    <div class="trust-group">
+      <span class="trust-label">We ship worldwide via</span>
+      <span class="carrier-badge">DHL</span>
+      <span class="carrier-badge">FedEx</span>
+      <span class="carrier-badge">UPS</span>
+    </div>
+    <div class="trust-group">
+      <span class="trust-label">Payment accepted</span>
+      <span class="pay-badge">Visa</span>
+      <span class="pay-badge">Mastercard</span>
+      <span class="pay-badge">Amex</span>
+      <span class="pay-badge">Discover</span>
+      <span class="pay-badge">PayPal</span>
     </div>
   </div>
   <div class="wrap foot-bottom">
     <span>&copy; <span class="yr"></span> e-automation. All rights reserved.</span>
-    
+    <span>Not an authorized distributor for any manufacturer named on this site.</span>
   </div>
 </footer>
 
@@ -615,9 +732,6 @@
     var currentResults = [];
     var shown = 0;
 
-    function enquireLink(make, part){
-      return 'mailto:e-automation@outlook.com?subject=' + encodeURIComponent('Enquiry: ' + make + ' ' + part) + '&body=' + encodeURIComponent('Hi, I\'d like to enquire about ' + make + ' ' + part + ' — is this in stock?');
-    }
     function waLink(make, part){
       var text = encodeURIComponent('Hi, I\'d like to enquire about ' + make + ' ' + part + ' — is this in stock?');
       return 'https://wa.me/19162945262?text=' + text;
@@ -628,6 +742,8 @@
         var tr = document.createElement('tr');
         var tdMake = document.createElement('td'); tdMake.className = 't-make'; tdMake.textContent = it.make;
         var tdPart = document.createElement('td'); tdPart.className = 't-part'; tdPart.textContent = it.part;
+        var tdStatus = document.createElement('td');
+        tdStatus.innerHTML = '<span class="stock-status"><span class="dot"></span>In Stock</span>';
         var tdAction = document.createElement('td'); tdAction.className = 't-action';
 
         var waBtn = document.createElement('a');
@@ -635,9 +751,9 @@
         waBtn.innerHTML = '<svg class="wa-icon" width="12" height="12" viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M16.01 3C9.38 3 4 8.38 4 15.01c0 2.34.64 4.53 1.75 6.4L4 29l7.77-1.7a12.9 12.9 0 0 0 4.24.72h.01c6.63 0 12.01-5.38 12.01-12.01C28.03 8.38 22.65 3 16.01 3zm0 21.86h-.01a10 10 0 0 1-5.1-1.4l-.37-.22-3.86.85.83-3.78-.24-.39a9.9 9.9 0 0 1-1.53-5.3c0-5.5 4.48-9.98 9.99-9.98 2.67 0 5.17 1.04 7.06 2.93a9.9 9.9 0 0 1 2.92 7.06c0 5.51-4.48 9.23-9.99 9.23zm5.47-7.44c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.65-2.05-.17-.3-.02-.46.13-.61.14-.14.3-.35.45-.53.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.08 3.18 5.05 4.46.7.3 1.25.48 1.68.62.71.22 1.35.19 1.86.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35z"/></svg>WhatsApp';
         waBtn.href = waLink(it.make, it.part); waBtn.target = '_blank'; waBtn.rel = 'noopener noreferrer';
 
-        var enqBtn = document.createElement('button');
-        enqBtn.type = 'button'; enqBtn.className = 'row-btn'; enqBtn.textContent = 'Enquire';
-        enqBtn.addEventListener('click', function(){
+        var quoteBtn = document.createElement('button');
+        quoteBtn.type = 'button'; quoteBtn.className = 'row-btn row-btn-primary'; quoteBtn.textContent = 'Get Quote';
+        quoteBtn.addEventListener('click', function(){
           var partField = document.getElementById('part');
           if(partField){ partField.value = it.make + ' — ' + it.part; }
           document.getElementById('contact').scrollIntoView({ behavior:'smooth' });
@@ -645,8 +761,8 @@
           if(nameField){ setTimeout(function(){ nameField.focus(); }, 400); }
         });
 
-        tdAction.appendChild(waBtn); tdAction.appendChild(enqBtn);
-        tr.appendChild(tdMake); tr.appendChild(tdPart); tr.appendChild(tdAction);
+        tdAction.appendChild(quoteBtn); tdAction.appendChild(waBtn);
+        tr.appendChild(tdMake); tr.appendChild(tdPart); tr.appendChild(tdStatus); tr.appendChild(tdAction);
         tbody.appendChild(tr);
       });
     }
@@ -680,7 +796,7 @@
         meta.textContent = 'No matches found. Try a shorter search term, or send us the part details directly.';
         var tr = document.createElement('tr');
         var td = document.createElement('td');
-        td.colSpan = 3; td.className = 'stock-empty';
+        td.colSpan = 4; td.className = 'stock-empty';
         td.textContent = "Can't find it? We source obsolete and discontinued parts too — get in touch and we'll trace it.";
         tr.appendChild(td); tbody.appendChild(tr);
         return;
@@ -713,6 +829,19 @@
     }
 
     runSearch();
+  })();
+
+  // Prefill the quote form's part number field from a ?part= URL parameter
+  // (used by "Request a quote" links on individual product pages)
+  (function(){
+    var params = new URLSearchParams(window.location.search);
+    var partParam = params.get('part');
+    if(partParam){
+      var partField = document.getElementById('part');
+      if(partField){ partField.value = partParam; }
+      var nameField = document.getElementById('name');
+      if(nameField){ setTimeout(function(){ nameField.focus(); }, 500); }
+    }
   })();
 </script>
 
